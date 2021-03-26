@@ -12,7 +12,7 @@
 #define TRIGGER 10
 #define ECHO 11
 
-int average = 0;
+float average = 0;
 
 void setup() {
   pinMode(LED_RED, OUTPUT);
@@ -21,41 +21,63 @@ void setup() {
   pinMode(BUZZER, OUTPUT);
   pinMode(TRIGGER, OUTPUT);
   pinMode(ECHO, INPUT_PULLUP);
-  Serial.begin(115200);
+  Serial.begin(9600);
 }
 
 void loop() {
+  int count = 0;
   for (int i = 0; i < 5; i++) {
-    average += distance();
+    float tmp = distance();
+    if (tmp != 0 && tmp < 300) {
+      average += tmp;
+      count++;
+    }
     delay(10);
   }
-  average /= 5;
-  if (average < 250 && average >= 200) {
-    digitalWrite(LED_YELLOW, HIGH);
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, LOW);
-    noTone(BUZZER);
-  } else if (average < 200 && average > 0) {
-    digitalWrite(LED_YELLOW, LOW);
-    digitalWrite(LED_RED, HIGH);
-    digitalWrite(LED_GREEN, LOW);
-    tone(BUZZER, 4000);
+  if (count > 0 && average > 0) {
+    average /= count;
+    if (average < 250 && average >= 200)
+      yellow();
+    else if (average < 200 && average > 0)
+      red();
+    else
+      green();
+    Serial.print(average);
+    Serial.println(" cm");
   } else {
-    digitalWrite(LED_YELLOW, LOW);
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, HIGH);
-    noTone(BUZZER);
+    Serial.println("Ohtu pole :)");
+    green();
   }
-  Serial.print(average);
-  Serial.println(" cm");
+  average = 0;
 }
 
-int distance() {
+float distance() {
   digitalWrite(TRIGGER, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIGGER, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIGGER, LOW);
   long duration = pulseIn(ECHO, HIGH, 250000);
-  return duration * 0.034 / 2;
+  return duration * 0.0343 / 2;
+}
+
+void red() {
+  digitalWrite(LED_YELLOW, LOW);
+  digitalWrite(LED_RED, HIGH);
+  digitalWrite(LED_GREEN, LOW);
+  tone(BUZZER, 4000);
+}
+
+void yellow() {
+  digitalWrite(LED_YELLOW, HIGH);
+  digitalWrite(LED_RED, LOW);
+  digitalWrite(LED_GREEN, LOW);
+  noTone(BUZZER);
+}
+
+void green() {
+  digitalWrite(LED_YELLOW, LOW);
+  digitalWrite(LED_RED, LOW);
+  digitalWrite(LED_GREEN, HIGH);
+  noTone(BUZZER);
 }
