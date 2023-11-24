@@ -1,3 +1,8 @@
+/*
+ * Arduino Workshop - Digipurk, ylari[at]digipurk.ee
+ * Lab - RGB LED and Potentiometer
+ */
+
 #define rgb_red_pin 11
 #define rgb_green_pin 10
 #define rgb_blue_pin 9

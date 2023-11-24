@@ -1,6 +1,6 @@
 /*
- * Arduino Workshop - Digipurk OÜ, ylari[at]digipurk.ee
- * Lab 2 - RGB LED and Temperature
+ * Arduino Workshop - Digipurk, ylari[at]digipurk.ee
+ * Lab - RGB LED and Temperature
  */
 
 #include <OneWire.h> // first we include the libraries
