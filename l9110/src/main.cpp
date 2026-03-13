@@ -1,6 +1,15 @@
 /*
  * Arduino Labs - Digipurk, ylari[at]digipurk.ee
+ *
  * L9110 motor driver
+ * https://digipurk.ee/toode/fan-module-l9110
+ *
+ * Connections:
+ *   L9110 -> Arduino
+ *     INA -> D5
+ *     INB -> D6
+ *     VCC -> 5V
+ *     GND -> GND
  */
 
 #include <Arduino.h>
